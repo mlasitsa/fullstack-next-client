@@ -18,10 +18,18 @@ const Posts = () => {
 
 const [data, setData] = useState<DataDetails[]>([])
 const [filteredData, setFilteredData] = useState<DataDetails[]>([])
+const [currentPage, setCurentPage] = useState(1)
 const [loading, setLoading] = useState(true)
 const [searchTerm, setSearchTerm] = useState('');
+
+
 const isSearching = searchTerm.trim().length > 0;
 const newData = isSearching  ? filteredData : data
+const postsPerPage = 10
+const startIndex = (currentPage - 1) * postsPerPage;
+const endIndex = startIndex + postsPerPage;
+const totalPages = Math.ceil(newData.length / postsPerPage);
+const paginatedData = newData.slice(startIndex, endIndex);
 
 
 useEffect(() => {
@@ -48,6 +56,7 @@ useEffect(() => {
 
 const searchPost = (val: string) => {
   setSearchTerm(val);
+  setCurentPage(1)
   if (val.trim() === "") {
     setFilteredData([])
   } else {
@@ -60,10 +69,7 @@ const searchPost = (val: string) => {
   return (
     <div>
       {loading ? "Loading..." 
-      
-      
-      : 
-
+      :
       data ? 
       <>
       <div className='flex flex-col justify-center items-center m-4 text-2xl'>
@@ -75,13 +81,11 @@ const searchPost = (val: string) => {
           className='bg-amber-950 text-white'
           placeholder='Search data...'/>
         </div>
-      </div>
-        
+      </div>  
 
       <ul className='flex flex-col gap-4 w-1/2 mx-auto'>
-        
-      {newData.length ? 
-      newData.map((post) => (
+      {paginatedData.length ? 
+        paginatedData.map((post) => (
           <li key={post.id} className='flex flex-col border-2 bg-amber-400 text-white font-extrabold'>
             <h1>Title: {post.title}</h1>
             <p>Description: {post.body}</p>
@@ -90,13 +94,33 @@ const searchPost = (val: string) => {
             <Link href={`/posts/${post.id}`}>
             <button className='cursor-pointer'>Details</button>
             </Link>
+
           </div>
           </li>
-          
       )) :
-      
-      <div>Nothing was found</div>}
+        <div>Nothing was found</div>
+      }
       </ul>
+      {newData.length > 0 && (
+        <div className="flex justify-center gap-2 mt-4">
+          {Array.from({ length: totalPages }, (_, i) => (
+      <button
+        key={i}
+        onClick={() => {
+          setCurentPage(i + 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        className={`px-3 py-1 rounded ${
+          currentPage === i + 1
+            ? 'bg-amber-600 text-white'
+            : 'bg-white text-black border'
+        }`}
+      >
+        {i + 1}
+      </button>
+      ))}
+      </div>
+)}
       </>
 
       :
