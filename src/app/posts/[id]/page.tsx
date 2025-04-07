@@ -10,6 +10,7 @@ type PostType = {
     body: string
   }
 
+  // I need to change here to use useParams hook since its client, not server
 const Post = ({params} :{params : {id: string}}) => {
 
     const [post, setPost] = useState<PostType | null>(null)
