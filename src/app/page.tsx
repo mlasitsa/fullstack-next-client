@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Posts from "@/app/posts/page";
-
+// main file
 export default function Home() {
   return (
     <div>
