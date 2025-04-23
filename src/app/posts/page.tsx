@@ -24,7 +24,7 @@ const [searchTerm, setSearchTerm] = useState('');
 
 
 const isSearching = searchTerm.trim().length > 0;
-const newData = isSearching  ? filteredData : data
+const newData = isSearching ? filteredData : data
 const postsPerPage = 10
 const startIndex = (currentPage - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;

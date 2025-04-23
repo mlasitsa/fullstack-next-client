@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {useState, useEffect} from 'react'
+import { useParams } from 'next/navigation'
 
 type PostType = {
     userId: number,
@@ -11,22 +12,22 @@ type PostType = {
   }
 
   // I need to change here to use useParams hook since its client, not server
-const Post = ({params} :{params : {id: string}}) => {
-
+const Post = () => {
+    const {id} = useParams()
     const [post, setPost] = useState<PostType | null>(null)
 
     useEffect(() => {
 
         const getPost = async () => {
-            console.log(params.id)
-            const post = await fetch(`https://jsonplaceholder.typicode.com/posts/${params.id}`)
+            console.log(id)
+            const post = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`)
             const dataPost = await post.json()
             console.log(dataPost)
             setPost(dataPost)
         }
         getPost()
 
-    },[params.id])
+    },[id])
 
   return (
     <>
